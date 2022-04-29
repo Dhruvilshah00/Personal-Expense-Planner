@@ -14,25 +14,42 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 450,
-      child: ListView.builder(
-        itemBuilder: (cts, index) {
+      height: 300,
+      child: transactions.isEmpty ? Column(
+        children: <Widget>[
+        Text('No Transaction Added Yet!!',
+        style: Theme.of(context).textTheme.bodyText1,
+        ),
+          SizedBox(height: 20),
+          Container(
+            // padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            height: 200,
+              child: Image.asset(
+                'assets/images/waiting.png',
+                fit: BoxFit.cover,
+              ),
+          ),
+      ],
+      ) : ListView.builder(
+        itemCount: transactions.length,
+        itemBuilder: (ctx, index) {
           return Card(
             child: Row(
               children: <Widget>[
                 Container(
                   child: Text(
-                    '\$ ${transactions[index].amount}',
+                    '\$ ${transactions[index].amount.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
-                      color: Colors.purple,
+                      fontFamily: 'Quicksand',
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   margin: EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Colors.purple,
+                        color: Theme.of(context).primaryColor,
                         width: 2.0
                     ),
                   ),
@@ -43,10 +60,7 @@ class TransactionList extends StatelessWidget {
                   children: [
                     Text(
                       transactions[index].title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                     Text(
                       DateFormat.yMMMd().format(transactions[index].date),
