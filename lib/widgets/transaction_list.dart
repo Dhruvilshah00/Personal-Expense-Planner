@@ -6,19 +6,20 @@ class TransactionList extends StatelessWidget {
   // const TransactionList({Key? key}) : super(key: key);
 
   final List<Transaction> transactions;
+  final Function deleteTx;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, this.deleteTx);
 
 
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 500,
       child: transactions.isEmpty ? Column(
         children: <Widget>[
         Text('No Transaction Added Yet!!',
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.headline6,
         ),
           SizedBox(height: 20),
           Container(
@@ -34,43 +35,37 @@ class TransactionList extends StatelessWidget {
         itemCount: transactions.length,
         itemBuilder: (ctx, index) {
           return Card(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    '\$ ${transactions[index].amount.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      fontFamily: 'Quicksand',
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  margin: EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 2.0
-                    ),
-                  ),
-                  padding: EdgeInsets.all(5.0),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      transactions[index].title,
+            elevation: 5,
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: FittedBox(
+                    child: Text(
+                      '\$${transactions[index].amount}',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                    Text(
-                      DateFormat.yMMMd().format(transactions[index].date),
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ],
+              ),
+              title: Text(
+                  transactions[index].title,
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              subtitle: Text(
+                DateFormat.yMMMd().format(transactions[index].date,
+                ),
+              ),
+              trailing: IconButton(
+                onPressed: () => deleteTx(transactions[index].id),
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).errorColor,
+                ),
+              ),
             ),
           );
         },

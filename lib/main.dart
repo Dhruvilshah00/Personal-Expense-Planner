@@ -18,15 +18,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Expense Tracker',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-        // accentColor: Colors.amberAccent,
+        primarySwatch: Colors.lightGreen,
+        accentColor: Colors.amberAccent,
+        errorColor: Colors.red,
         fontFamily: 'QuickSand',
         textTheme: ThemeData.light().textTheme.copyWith(
               bodyText1: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontFamily: 'QuickSand',
+                fontSize: 17,
+                fontWeight: FontWeight.w400,
               ),
+          headline6: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
             ),
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
@@ -70,12 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txtitle, double txamount) {
+  void _addNewTransaction(String txtitle, double txamount, DateTime chosenDate) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
       title: txtitle,
       amount: txamount,
-      date: DateTime.now(),
+      date: chosenDate,
     );
 
     setState(() {
@@ -92,6 +98,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _usertransaction.removeWhere((tx) => tx.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,12 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
           'Expense Tracker',
           style: TextStyle(
             fontFamily: 'OpenSans',
+            fontSize: 22,
           ),
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () => _startAddNewTransaction(context),
-            icon: Icon(Icons.add),
+            // onPressed: () => _startAddNewTransaction(context),
+            onPressed: () {},
+            icon: Icon(
+            Icons.notifications,
+            color: Colors.amber[300],
+            ),
           )
         ],
       ),
@@ -115,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransaction),
-            TransactionList(_usertransaction),
+            TransactionList(_usertransaction, _deleteTransaction),
           ],
         ),
       ),
